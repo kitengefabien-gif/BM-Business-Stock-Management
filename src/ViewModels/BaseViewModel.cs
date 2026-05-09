@@ -1,25 +1,16 @@
-using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace BMBusinessStockManagement.ViewModels
 {
     /// <summary>
-    /// Classe de base pour tous les ViewModels (MVVM)
-    /// Implémente INotifyPropertyChanged pour la liaison de données
+    /// Classe de base pour tous les ViewModels
+    /// Implémente INotifyPropertyChanged pour le binding XAML
     /// </summary>
     public abstract class BaseViewModel : INotifyPropertyChanged
     {
-        private bool _isBusy;
         private string _title;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public bool IsBusy
-        {
-            get => _isBusy;
-            set => SetProperty(ref _isBusy, value);
-        }
+        private bool _isBusy;
 
         public string Title
         {
@@ -27,16 +18,25 @@ namespace BMBusinessStockManagement.ViewModels
             set => SetProperty(ref _title, value);
         }
 
-        protected void SetProperty<T>(ref T backingStore, T value,
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set => SetProperty(ref _isBusy, value);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected bool SetProperty<T>(ref T backingStore, T value,
             [CallerMemberName] string propertyName = "",
             Action onChanged = null)
         {
             if (EqualityComparer<T>.Default.Equals(backingStore, value))
-                return;
+                return false;
 
             backingStore = value;
             onChanged?.Invoke();
             OnPropertyChanged(propertyName);
+            return true;
         }
 
         public void OnPropertyChanged([CallerMemberName] string name = "") =>
