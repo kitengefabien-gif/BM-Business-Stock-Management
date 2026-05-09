@@ -3,58 +3,124 @@ using System;
 namespace BMBusinessStockManagement.Models
 {
     /// <summary>
-    /// Model pour la gestion financière
-    /// Revenus, Coûts, Bénéfices
+    /// Model pour les transactions financières et rapports
     /// </summary>
-    public class Finance
+    public class FinancialTransaction
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         
         /// <summary>
-        /// ID du camion/voyage associé
+        /// Type de transaction : Revenu, Coût, etc.
+        /// </summary>
+        public TransactionType Type { get; set; }
+        
+        /// <summary>
+        /// Description de la transaction
+        /// </summary>
+        public string Description { get; set; }
+        
+        /// <summary>
+        /// Montant en devise locale
+        /// </summary>
+        public decimal Amount { get; set; }
+        
+        /// <summary>
+        /// Devise (ZMW pour Zambie, CDF pour RDC)
+        /// </summary>
+        public string Currency { get; set; } = "ZMW";
+        
+        /// <summary>
+        /// Catégorie de transaction
+        /// </summary>
+        public TransactionCategory Category { get; set; }
+        
+        /// <summary>
+        /// Destination associée (optionnel)
+        /// </summary>
+        public TruckDestination? Destination { get; set; }
+        
+        /// <summary>
+        /// ID du camion associé (optionnel)
         /// </summary>
         public string TruckId { get; set; }
         
         /// <summary>
-        /// Montant des revenus (prix de vente)
+        /// Utilisateur qui a enregistré la transaction
         /// </summary>
-        public decimal Revenue { get; set; }
+        public string UserId { get; set; }
         
         /// <summary>
-        /// Montant des coûts (transport, carburant, etc.)
+        /// Numéro de reçu/facture (optionnel)
         /// </summary>
-        public decimal Cost { get; set; }
+        public string ReceiptNumber { get; set; }
         
         /// <summary>
-        /// Bénéfice calculé automatiquement
-        /// Formule : Bénéfice = Revenus - Coûts
+        /// Méthode de paiement
         /// </summary>
-        public decimal Profit => Revenue - Cost;
+        public PaymentMethod PaymentMethod { get; set; }
         
         /// <summary>
-        /// Pourcentage de marge bénéficiaire
+        /// Statut de la transaction
         /// </summary>
-        public decimal ProfitMargin => Revenue > 0 ? (Profit / Revenue) * 100 : 0;
+        public TransactionStatus Status { get; set; } = TransactionStatus.Completed;
         
-        /// <summary>
-        /// Type de transaction
-        /// </summary>
-        public TransactionType TransactionType { get; set; }
-        
-        /// <summary>
-        /// Destination associée
-        /// </summary>
-        public TruckDestination Destination { get; set; }
-        
-        /// <summary>
-        /// Mois et année de la transaction
-        /// </summary>
         public DateTime TransactionDate { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
+        public bool IsDeleted { get; set; } = false;
+    }
+
+    /// <summary>
+    /// Model pour les rapports financiers mensuels
+    /// </summary>
+    public class FinancialReport
+    {
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         
         /// <summary>
-        /// Devise locale (ZMW, CDF)
+        /// Mois du rapport (format: YYYY-MM)
+        /// </summary>
+        public string Month { get; set; }
+        
+        /// <summary>
+        /// Total des revenus du mois
+        /// </summary>
+        public decimal TotalRevenue { get; set; }
+        
+        /// <summary>
+        /// Total des coûts du mois
+        /// </summary>
+        public decimal TotalCosts { get; set; }
+        
+        /// <summary>
+        /// Bénéfice = Revenus - Coûts
+        /// </summary>
+        public decimal Profit => TotalRevenue - TotalCosts;
+        
+        /// <summary>
+        /// Marge bénéficiaire en %
+        /// </summary>
+        public decimal ProfitMargin => TotalRevenue > 0 ? (Profit / TotalRevenue) * 100 : 0;
+        
+        /// <summary>
+        /// Nombre de voyages effectués
+        /// </summary>
+        public int TripCount { get; set; }
+        
+        /// <summary>
+        /// Montant moyen par voyage
+        /// </summary>
+        public decimal AverageTripAmount => TripCount > 0 ? TotalRevenue / TripCount : 0;
+        
+        /// <summary>
+        /// Devises utilisées (ZMW, CDF)
         /// </summary>
         public string Currency { get; set; } = "ZMW";
+        
+        /// <summary>
+        /// Analyse par destination
+        /// </summary>
+        public List<DestinationAnalysis> DestinationBreakdown { get; set; } = new();
         
         /// <summary>
         /// Notes/Observations
@@ -63,67 +129,19 @@ namespace BMBusinessStockManagement.Models
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
-        public bool IsDeleted { get; set; } = false;
     }
 
     /// <summary>
-    /// Model pour les statistiques financières mensuelles/annuelles
+    /// Analyse des revenus par destination
     /// </summary>
-    public class FinancialReport
+    public class DestinationAnalysis
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-        
-        /// <summary>
-        /// Période du rapport
-        /// </summary>
-        public ReportPeriod Period { get; set; }
-        
-        /// <summary>
-        /// Année du rapport
-        /// </summary>
-        public int Year { get; set; }
-        
-        /// <summary>
-        /// Mois du rapport (1-12, 0 si année entière)
-        /// </summary>
-        public int? Month { get; set; }
-        
-        /// <summary>
-        /// Trimestre du rapport (optionnel)
-        /// </summary>
-        public int? Quarter { get; set; }
-        
-        /// <summary>
-        /// Total des revenus pour la période
-        /// </summary>
+        public TruckDestination Destination { get; set; }
+        public int TripCount { get; set; }
         public decimal TotalRevenue { get; set; }
-        
-        /// <summary>
-        /// Total des coûts pour la période
-        /// </summary>
-        public decimal TotalCost { get; set; }
-        
-        /// <summary>
-        /// Bénéfice total = TotalRevenue - TotalCost
-        /// </summary>
-        public decimal TotalProfit => TotalRevenue - TotalCost;
-        
-        /// <summary>
-        /// Nombre de transactions
-        /// </summary>
-        public int TransactionCount { get; set; }
-        
-        /// <summary>
-        /// Revenus par destination (JSON ou sérialisé)
-        /// </summary>
-        public string RevenueByDestination { get; set; }
-        
-        /// <summary>
-        /// Bénéfice par destination
-        /// </summary>
-        public string ProfitByDestination { get; set; }
-        
-        public DateTime GeneratedAt { get; set; } = DateTime.UtcNow;
+        public decimal TotalCosts { get; set; }
+        public decimal Profit => TotalRevenue - TotalCosts;
+        public decimal AverageRevenue => TripCount > 0 ? TotalRevenue / TripCount : 0;
     }
 
     /// <summary>
@@ -131,21 +149,49 @@ namespace BMBusinessStockManagement.Models
     /// </summary>
     public enum TransactionType
     {
-        Vente = 0,      // Vente de ciment
-        Transport = 1,  // Frais de transport
-        Carburant = 2,  // Carburant
-        Maintenance = 3, // Maintenance camion
-        Autre = 4       // Autre
+        Revenu = 0,      // Revenu/Vente
+        Cout = 1,        // Coût/Dépense
+        Remboursement = 2,
+        Bonus = 3,
+        Deduction = 4
     }
 
     /// <summary>
-    /// Périodes de rapport
+    /// Catégories de transactions
     /// </summary>
-    public enum ReportPeriod
+    public enum TransactionCategory
     {
-        Hebdomadaire = 0,
-        Mensuel = 1,
-        Trimestriel = 2,
-        Annuel = 3
+        VenteCiment = 0,         // Vente de ciment
+        FraisTransport = 1,      // Frais de transport
+        CoutCarburant = 2,       // Coût du carburant
+        MaintenanceCamion = 3,   // Maintenance véhicule
+        SalaireChauffeur = 4,    // Salaire chauffeur
+        FraisAdministratifs = 5, // Frais administratifs
+        AutreRevenu = 6,
+        AutreDepense = 7
+    }
+
+    /// <summary>
+    /// Méthodes de paiement
+    /// </summary>
+    public enum PaymentMethod
+    {
+        Especes = 0,        // Espèces
+        Virement = 1,       // Virement bancaire
+        Cheque = 2,
+        MobileWallet = 3,   // Porte-monnaie mobile (MTN, Airtel, etc.)
+        Crypto = 4,         // Crypto-monnaie
+        Credit = 5          // Crédit/À crédit
+    }
+
+    /// <summary>
+    /// Statut de la transaction
+    /// </summary>
+    public enum TransactionStatus
+    {
+        Pending = 0,      // En attente
+        Completed = 1,    // Complétée
+        Cancelled = 2,    // Annulée
+        Failed = 3        // Échouée
     }
 }
