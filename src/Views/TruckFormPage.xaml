@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BMBusinessStockManagement.Views.TruckFormPage"
+             Title="Nouveau voyage"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15" Spacing="15">
+            
+            <!-- Driver Name -->
+            <Label Text="Nom du chauffeur *" FontAttributes="Bold" />
+            <Entry Text="{Binding SelectedDriverName}" Placeholder="JEAN DUPONT" />
+            <CollectionView ItemsSource="{Binding DriverNameSuggestions}" SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding .}" Padding="10" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- License Plate -->
+            <Label Text="Plaque minéralogique *" FontAttributes="Bold" />
+            <Entry Text="{Binding SelectedPlate}" Placeholder="XYZ-123" />
+            <CollectionView ItemsSource="{Binding PlateSuggestions}" SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding .}" Padding="10" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Phone Number -->
+            <Label Text="Téléphone *" FontAttributes="Bold" />
+            <Entry Text="{Binding SelectedPhone}" Placeholder="+243 XXXXXXXXX" Keyboard="Telephone" />
+            <CollectionView ItemsSource="{Binding PhoneSuggestions}" SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding .}" Padding="10" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Destination -->
+            <Label Text="Destination *" FontAttributes="Bold" />
+            <Picker SelectedItem="{Binding Truck.Destination}">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Lubumbashi</x:String>
+                        <x:String>Kolwezi</x:String>
+                        <x:String>Ndola</x:String>
+                        <x:String>Lusaka</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <!-- Cement Type -->
+            <Label Text="Type de ciment *" FontAttributes="Bold" />
+            <Picker SelectedItem="{Binding Truck.CementType}">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Supaset</x:String>
+                        <x:String>Powerbuild</x:String>
+                        <x:String>Duracrete</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <!-- Quantity -->
+            <Label Text="Quantité (sacs) *" FontAttributes="Bold" />
+            <Entry Text="{Binding Truck.CementQuantity}" Keyboard="Numeric" Placeholder="0" />
+
+            <!-- Travel Amount -->
+            <Label Text="Montant du voyage *" FontAttributes="Bold" />
+            <Entry Text="{Binding Truck.TravelAmount}" Keyboard="Numeric" Placeholder="0" />
+
+            <!-- Transport Cost -->
+            <Label Text="Coûts de transport" FontAttributes="Bold" />
+            <Entry Text="{Binding Truck.TransportCost}" Keyboard="Numeric" Placeholder="0" />
+
+            <!-- Buttons -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                <Button Grid.Column="0" Text="Enregistrer" Command="{Binding SaveCommand}" BackgroundColor="#27AE60" TextColor="White" />
+                <Button Grid.Column="1" Text="Annuler" Command="{Binding CancelCommand}" BackgroundColor="#95A5A6" TextColor="White" />
+            </Grid>
+
+            <!-- Loading Indicator -->
+            <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" Color="#3498DB" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

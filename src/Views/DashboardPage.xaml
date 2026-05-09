@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BMBusinessStockManagement.Views.DashboardPage"
+             Title="Tableau de bord"
+             BackgroundColor="#F5F5F5">
+
+    <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
+        <ScrollView>
+            <VerticalStackLayout Padding="15" Spacing="15">
+                
+                <!-- Header Stats -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10" RowSpacing="10">
+                    <!-- Total Trips -->
+                    <Frame Grid.Column="0" CornerRadius="10" Padding="15" HasShadow="True" BackgroundColor="White">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Voyages du jour" FontSize="12" TextColor="#7F8C8D" />
+                            <Label Text="{Binding TotalTrips}" FontSize="24" FontAttributes="Bold" TextColor="#3498DB" />
+                        </VerticalStackLayout>
+                    </Frame>
+                    
+                    <!-- Profit -->
+                    <Frame Grid.Column="1" CornerRadius="10" Padding="15" HasShadow="True" BackgroundColor="White">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Profit du jour" FontSize="12" TextColor="#7F8C8D" />
+                            <Label Text="{Binding Profit, StringFormat='{0:C}'}" FontSize="24" FontAttributes="Bold" TextColor="#27AE60" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+
+                <!-- Add Button -->
+                <Button Text="+ Ajouter un voyage"
+                        Command="{Binding AddTruckCommand}"
+                        BackgroundColor="#3498DB"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        Padding="0,15"
+                        CornerRadius="8" />
+
+                <!-- Trucks List -->
+                <Label Text="Voyages en cours" FontAttributes="Bold" FontSize="16" />
+                <CollectionView ItemsSource="{Binding Trucks}" SelectionMode="Single" SelectionChangedCommand="{Binding EditTruckCommand}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame CornerRadius="10" Padding="15" Margin="0,0,0,10" HasShadow="True" BackgroundColor="White">
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                    <VerticalStackLayout Grid.Column="0" Spacing="5">
+                                        <Label Text="{Binding DriverName}" FontAttributes="Bold" FontSize="14" />
+                                        <Label Text="{Binding LicensePlate, StringFormat='Plaque: {0}'}" FontSize="12" TextColor="#7F8C8D" />
+                                        <Label Text="{Binding Destination}" FontSize="12" TextColor="#3498DB" FontAttributes="Bold" />
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="5" HorizontalOptions="End">
+                                        <Button Text="Modifier" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditTruckCommand}" CommandParameter="{Binding .}" FontSize="10" />
+                                        <Button Text="Supprimer" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteTruckCommand}" CommandParameter="{Binding .}" BackgroundColor="#E74C3C" FontSize="10" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>
