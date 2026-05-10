@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="BMBusinessStockManagement.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    FlyoutBehavior="Locked">
+
+    <TabBar>
+        <ShellContent 
+            Title="Dashboard" 
+            ContentTemplate="{DataTemplate local:DashboardPage}"
+            Route="Dashboard" />
+        
+        <ShellContent 
+            Title="Finance" 
+            ContentTemplate="{DataTemplate local:FinancePage}"
+            Route="Finance" />
+        
+        <ShellContent 
+            Title="Stock" 
+            ContentTemplate="{DataTemplate local:StockPage}"
+            Route="Stock" />
+        
+        <ShellContent 
+            Title="Profil" 
+            ContentTemplate="{DataTemplate local:ProfilePage}"
+            Route="Profile" />
+    </TabBar>
+
+    <ShellContent 
+        Title="Connexion"
+        ContentTemplate="{DataTemplate local:LoginPage}"
+        Route="Login" />
+        
+    <ShellContent 
+        Title="Formulaire Camion"
+        ContentTemplate="{DataTemplate local:TruckFormPage}"
+        Route="TruckForm" />
+</Shell>
