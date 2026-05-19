@@ -1,10 +1,6 @@
-# Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-bin/
-obj/
+.gitignore
+appsettings.json
+appsettings.Development.json
 
 # Visual Studio
 .vs/
@@ -44,5 +40,29 @@ appsettings.local.json
 *~
 
 # OS
-Thumbs.db
+Thumb.db
 *.log
+
+# SQLite
+*.db
+*.db-shm
+*.db-wal
+
+# Build results
+Debug/
+Release/
+out/
+build/
+dist/
+
+# Node (if using npm for web parts)
+node_modules/
+npm-debug.log*
+
+# Test results
+TestResults/
+*.trx
+
+# Database
+*.sqlite
+*.sqlite3
