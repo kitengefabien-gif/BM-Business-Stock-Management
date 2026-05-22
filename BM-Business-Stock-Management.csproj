@@ -1,0 +1,86 @@
+<Project Sdk="Microsoft.Maui.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>net8.0-windows;net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+        <TargetFrameworks Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFrameworks)')) == 'windows'">net8.0-windows10.0.19041.0</TargetFrameworks>
+        <OutputType>Exe</OutputType>
+        <UseMaui>true</UseMaui>
+        <SingleProject>true</SingleProject>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <!-- Display name -->
+        <ApplicationTitle>BM Stock Management</ApplicationTitle>
+
+        <!-- App Identifier -->
+        <ApplicationId>com.bmbusiness.stock</ApplicationId>
+        <ApplicationVersion>1</ApplicationVersion>
+
+        <!-- Versions -->
+        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <ApplicationVersion>1</ApplicationVersion>
+
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFrameworks)')) == 'ios'">14.2</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFrameworks)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFrameworks)')) == 'android'">21.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFrameworks)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- Supabase -->
+        <PackageReference Include="Supabase" Version="2.1.0" />
+        <PackageReference Include="Supabase.Gotrue" Version="2.1.0" />
+        <PackageReference Include="Supabase.Postgrest" Version="2.1.0" />
+        <PackageReference Include="Supabase.Realtime" Version="2.1.0" />
+        <PackageReference Include="Supabase.Storage" Version="2.1.0" />
+
+        <!-- SQLite for offline storage -->
+        <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+        <PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
+        <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.5" />
+
+        <!-- HTTP and Networking -->
+        <PackageReference Include="Refit" Version="6.3.2" />
+        <PackageReference Include="RestSharp" Version="107.3.0" />
+
+        <!-- JSON Serialization -->
+        <PackageReference Include="System.Text.Json" Version="8.0.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+
+        <!-- Utilities -->
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+        <PackageReference Include="CommunityToolkit.Collections" Version="8.0.0" />
+
+        <!-- Logging -->
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+
+        <!-- Configuration -->
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    </ItemGroup>
+
+    <!-- App Icons and Splash Screen -->
+    <ItemGroup>
+        <MauiIcon Include="Resources/AppIcon/appicon.svg" />
+        <MauiSplashScreen Include="Resources/Splash/splash.svg" Color="#512BD4" />
+
+        <!-- Customize these icon and splash screen images. See MauiAssets_Readme.txt. -->
+        <!-- <MauiIcon Include="Resources/AppIcon/appicon.svg" /> -->
+        <!-- <MauiSplashScreen Include="Resources/Splash/splash.svg" Color="#512BD4" /> -->
+    </ItemGroup>
+
+    <!-- Images -->
+    <ItemGroup>
+        <MauiImage Include="Resources/Images/*" />
+    </ItemGroup>
+
+    <!-- Custom Fonts -->
+    <ItemGroup>
+        <MauiFont Include="Resources/Fonts/*" />
+    </ItemGroup>
+
+    <!-- Raw Assets (e.g. JSON files) that you want to copy to bin/obj -->
+    <ItemGroup>
+        <MauiAsset Include="Resources/Raw/**" LogicalName="%(Filename)%(Extension)" />
+    </ItemGroup>
+</Project>
